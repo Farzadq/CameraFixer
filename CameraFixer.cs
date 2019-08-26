@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /* Created by Farzad Hemmati
  * Maintains the desired aspect ratio when entering fullscreen.
@@ -24,7 +24,7 @@ public class CameraFixer : MonoBehaviour
 
     private void Update()
     {
-        //or call SetAspectRatio() dirrectly when entering fullscreen
+        //Or call SetAspectRatio() dirrectly when entering fullscreen
         if (lastKnownFSState != Screen.fullScreen)
         {
             lastKnownFSState = Screen.fullScreen;
@@ -35,21 +35,21 @@ public class CameraFixer : MonoBehaviour
 
     public void FixScreenSize()
     {
-#if UNITY_WEBGL
-        if (Screen.fullScreen)
+        #if UNITY_WEBGL
+            if (Screen.fullScreen)
+                SetAspectRatio();
+            else
+                SetSmallSize();
+        #endif
+        #if UNITY_STANDALONE
             SetAspectRatio();
-        else
-            SetSmallSize();
-#endif
-#if UNITY_STANDALONE
-        SetAspectRatio();
-#endif 
+        #endif 
     }
 
     public void SetAspectRatio()
     {
         //current viewport height should be scaled by this amount
-        float scaledHeight = (float)Screen.width / Screen.height / targetAspect;
+        float scaledHeight = (float)Screen.width / Screen.height / aspectRatio.ratio;
 
         Rect rect = cam.rect;
         if (scaledHeight != 1f)
@@ -78,9 +78,8 @@ public class CameraFixer : MonoBehaviour
 #if UNITY_WEBGL
     void SetSmallSize()
     {
-        //size of the game when published on the web
-        int webCanvasWidth = 1280; 
-        int webCanvasHight = 720;
+        int webCanvasWidth = 1280; //size of the game when published on the web
+        int webCanvasHight = 720; //size of the game when published on the web
 
         if ((Screen.currentResolution.width < 1920 || Screen.currentResolution.height < 1080) && !Screen.fullScreen)
         {
@@ -94,13 +93,12 @@ public class CameraFixer : MonoBehaviour
 
             rect.width = usableX / webCanvasWidth;
             rect.height = usableY / webCanvasHight;
-            if (usableX > usableY / consequent * antecedent) //screen too long for 16:9
-                rect.width = usableY / consequent * antecedent / webCanvasWidth;
-            else if (usableX < usableY / consequent * antecedent) //screen too tall for 16:9
-                rect.height = usableX / antecedent * consequent / webCanvasHight;
+            if (usableX > usableY / aspectRatio.consequent * aspectRatio.antecedent) //screen too long for 16:9
+                rect.width = usableY / aspectRatio.consequent * aspectRatio.antecedent / webCanvasWidth;
+            else if (usableX < usableY / aspectRatio.consequent * aspectRatio.antecedent) //screen too tall for 16:9
+                rect.height = usableX / aspectRatio.antecedent * aspectRatio.consequent / webCanvasHight;
             cam.rect = rect;
         }
     }
 #endif
-
 }
