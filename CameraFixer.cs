@@ -25,7 +25,7 @@ public class CameraFixer : MonoBehaviour
 
     private void Update()
     {
-        //Or call SetAspectRatio() dirrectly when entering fullscreen
+        //or call SetAspectRatio() dirrectly when entering fullscreen
         if (lastKnownFSState != Screen.fullScreen)
         {
             lastKnownFSState = Screen.fullScreen;
@@ -79,8 +79,9 @@ public class CameraFixer : MonoBehaviour
 #if UNITY_WEBGL
     void SetSmallSize()
     {
-        int webCanvasWidth = 1280; //size of the game when published on the web
-        int webCanvasHight = 720; //size of the game when published on the web
+        //size of the game when published on the web
+        int webCanvasWidth = 1280; 
+        int webCanvasHight = 720;
 
         if ((Screen.currentResolution.width < 1920 || Screen.currentResolution.height < 1080) && !Screen.fullScreen)
         {
