@@ -10,9 +10,8 @@
 public class CameraFixer : MonoBehaviour
 {
     private Camera cam;
-    private static readonly float antecedent = 16f; //first term of the aspect ratio
-    private static readonly float consequent = 9f; //second term of the aspect ratio
-    private static readonly float targetAspect = antecedent / consequent;
+    private static readonly float antecedent = 9, consequent = 16;
+    private static readonly (float antecedent, float consequent, float ratio) aspectRatio = (antecedent, consequent, antecedent / consequent);
     private static bool lastKnownFSState;
 
     private void Awake() => cam = GetComponent<Camera>();
